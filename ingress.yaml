@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hello-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/limit-rps: "5"       # Requests per second
+    nginx.ingress.kubernetes.io/limit-rpm: "5"       # Requests per minute
+    nginx.ingress.kubernetes.io/limit-conns: "1"     # Connections per client
+    nginx.ingress.kubernetes.io/limit-rpm-response-code: "429"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/default-backend: "404-service"  # Custom backend for 404
+spec:
+  rules:
+    - host: hello-app.example  # Specific host name for the app
+      http:
+        paths:
+          - path: /v1
+            pathType: Prefix
+            backend:
+              service:
+                name: hello-app1-service
+                port:
+                  number: 8080
+          - path: /v2
+            pathType: Prefix
+            backend:
+              service:
+                name: hello-app2-service
+                port:
+                  number: 8080
