@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-configuration
+  namespace: ingress-nginx  # Adjust the namespace if needed
+data:
+  # Custom NGINX access log format with the X-Client-Id header
+  log-format-upstream: '{"time_local": "$time_local", "remote_addr": "$remote_addr", "remote_user": "$remote_user", "request": "$request", "status": "$status", "body_bytes_sent": "$body_bytes_sent", "request_time": "$request_time", "upstream_response_time": "$upstream_response_time", "upstream_addr": "$upstream_addr", "x_client_id": "$http_x_client_id"}'
